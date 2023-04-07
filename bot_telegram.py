@@ -1,4 +1,6 @@
+import json
 import os
+import string
 
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
@@ -37,19 +39,15 @@ async def pizza_adress_command(message: types.Message):
     await bot.send_message(message.from_user.id, "Адрес:  г.Красноярск, ул.Ленина, д.287, пом.1")
 
 
+""" ************** ОБЩАЯ ЧАСТЬ **************"""
+
+
 @dp.message_handler()
 async def echo_send(message: types.Message):
-    if message.text == 'Hello':
-        await message.answer('Hello too!')
-
-    # Ответ на сообщение
-    # await message.answer(message.text)
-
-    # Отвечает на сообщения путем выделения пользователя
-    # await message.reply(message.text)
-
-    # Ответ на сообщение в личку
-    # await bot.send_message(message.from_user.id, message.text)
+    if {i.lower().translate(str.maketrans('', '', string.punctuation)) for i in message.text.split(' ')}.intersection(
+            set(json.load(open('cens.json')))) != set():
+        await message.reply('Маты запрещены')
+        await message.delete()
 
 
 executor.start_polling(dp, skip_updates=True, on_startup=on_startup)
