@@ -1,11 +1,12 @@
 from aiogram import types, Dispatcher
 
 from create_bot import dp, bot
+from key_boards import kb_client
 
 
-async def command_star(message: types.Message):
+async def command_start(message: types.Message):
     try:
-        await bot.send_message(message.from_user.id, 'Приятного аппетита')
+        await bot.send_message(message.from_user.id, 'Приятного аппетита', reply_markup=kb_client)
         await message.delete()
     except:
         await message.reply("Общение с ботом через лс, напишите ему: \nhttps://t.me/Pizza_SheefOkBot")
@@ -20,6 +21,6 @@ async def pizza_adress_command(message: types.Message):
 
 
 def register_handlers_client(dp: Dispatcher):
-    dp.register_message_handler(command_star, commands=['start', 'help'])
-    dp.register_message_handler(pizza_open_command, commands=['Режим работы'])
+    dp.register_message_handler(command_start, commands=['start', 'help'])
+    dp.register_message_handler(pizza_open_command, commands=['Время_работы'])
     dp.register_message_handler(pizza_adress_command, commands=['Адрес'])
