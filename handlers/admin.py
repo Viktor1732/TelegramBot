@@ -4,6 +4,7 @@ from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
 from create_bot import bot
+from key_boards import admin_kb
 
 ID = None
 
@@ -19,7 +20,7 @@ class FSMAdmin(StatesGroup):
 async def make_changes_command(message: types.Message):
     global ID
     ID = message.from_user.id
-    await bot.send_message(message.from_user.id, 'Чего хототите хозяин?')
+    await bot.send_message(message.from_user.id, 'Чего хототите хозяин?', reply_markup=admin_kb.btn_case_admin)
     await message.delete()
 
 
