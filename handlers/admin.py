@@ -4,6 +4,7 @@ from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
 from create_bot import bot
+from data_base import sqlite_db
 from key_boards import admin_kb
 
 ID = None
@@ -28,7 +29,7 @@ async def make_changes_command(message: types.Message):
 async def cm_start(message: types.Message):
     if message.from_user.id == ID:
         await FSMAdmin.photo.set()
-        await message.reply('Загрузить фото')
+        await message.reply('Загрузите фото')
 
 
 # Ловим первый ответ от пользователя
@@ -63,10 +64,8 @@ async def load_price(message: types.Message, state: FSMContext):
     if message.from_user.id == ID:
         async with state.proxy() as data:
             data['price'] = round(float(message.text), 2)
-
-        async with state.proxy() as data:
-            await message.reply(str(data))
-
+        await sqlite_db.sql_add_data(state)
+        await bot.send_message(message.from_user.id, "Данные успешно добавлены!")
         await state.finish()
 
 
